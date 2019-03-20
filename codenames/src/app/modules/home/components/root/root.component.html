@@ -1,0 +1,23 @@
+<h2>Codenames</h2>
+<div *ngIf="!isGameStarted">
+    <input type="text" placeholder="Type in Game ID" [(ngModel)]="gameid" />
+    <button type="button" class="btn btn btn-dark" (click)="this.enter(true)" [disabled]="!this.canStartGame()">&gt;
+        Enter as Code Master</button>
+    <button type="button" class="btn btn-outline-dark" (click)="this.enter(false)"
+        [disabled]="!this.canStartGame()">&gt;
+        Enter as Gameboard</button>
+</div>
+<div *ngIf="isGameStarted">
+    <div class="words">
+        <div *ngFor="let word of this.chosenWords" [class]="word.getClass()" (click)="this.toggle(word)">
+            {{word.word}}
+        </div>
+    </div>
+    <div id="first" *ngIf="this.isCodeMaster"></div>
+    <div id="lives" *ngIf="!this.isCodeMaster">
+        <div id="lives-blue">
+        </div>
+        <div id="lives-red">
+        </div>
+    </div>
+</div>
