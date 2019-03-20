@@ -1,23 +1,51 @@
-<h2>Codenames</h2>
-<div *ngIf="!isGameStarted">
-    <input type="text" placeholder="Type in Game ID" [(ngModel)]="gameid" />
-    <button type="button" class="btn btn btn-dark" (click)="this.enter(true)" [disabled]="!this.canStartGame()">&gt;
-        Enter as Code Master</button>
-    <button type="button" class="btn btn-outline-dark" (click)="this.enter(false)"
-        [disabled]="!this.canStartGame()">&gt;
-        Enter as Gameboard</button>
-</div>
-<div *ngIf="isGameStarted">
-    <div class="words">
-        <div *ngFor="let word of this.chosenWords" [class]="word.getClass()" (click)="this.toggle(word)">
-            {{word.word}}
-        </div>
+<div [class]="'gameboard' + (this.isDeath ?' killed' : '')">
+    <nav class="nav navbar">
+        <a class="navbar-brand" href="" onclick="return confirm('Reset game?')">
+            <img src="./assets/detective.png" width="50" height="50" alt="Detective codenames">
+        </a>
+    </nav>
+    <div *ngIf="!isGameStarted" class="startgame">
+        <form class="form justify-content-center">
+            <div class="form-group row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <input type="text" class="form-control form-control-lg" name="gameid" placeholder="Type in Game ID"
+                        [(ngModel)]="gameid" />
+                </div>
+                <div class="col-3"></div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3"></div>
+                <div class="col-3">
+                    <button type="button" class="btn btn-block btn-lg btn-dark" (click)="this.enter(true)"
+                        [disabled]="!this.canStartGame()">&gt;
+                        Enter as Code Master</button>
+                </div>
+                <div class="col-3">
+                    <button type="button" class="btn btn-block btn-lg btn-outline-dark" (click)="this.enter(false)"
+                        [disabled]="!this.canStartGame()">&gt;
+                        Enter as Gameboard</button>
+                </div>
+                <div class="col-3"></div>
+            </div>
+        </form>
     </div>
-    <div id="first" *ngIf="this.isCodeMaster"></div>
-    <div id="lives" *ngIf="!this.isCodeMaster">
-        <div id="lives-blue">
+    <div *ngIf="isGameStarted">
+        <div class="words">
+            <div *ngFor="let word of this.chosenWords" [class]="word.getClass()" (click)="this.toggle(word)">
+                {{word.word}}
+            </div>
         </div>
-        <div id="lives-red">
+        <div id="first" *ngIf="this.isCodeMaster"><span [class]="this.goesFirst+' label'">{{this.goesFirst}}</span>
+            goes first
+        </div>
+        <div id="lives" *ngIf="!this.isCodeMaster">
+            <div id="lives-blue">
+                <div *ngFor="let word of this.bluesLeft" class="life blue"></div>
+            </div>
+            <div id="lives-red">
+                <div *ngFor="let word of this.redsLeft" class="life red"></div>
+            </div>
         </div>
     </div>
 </div>

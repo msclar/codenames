@@ -1,10 +1,17 @@
+export enum CardType {
+    BLUE,
+    RED,
+    DEATH,
+    NEUTRAL
+}
+
 export class Word {
     word: string;
-    type: number;
+    type: CardType;
     show: boolean;
     ignored: boolean;
 
-    toggle(): void {
+    public toggle(): void {
         if (!this.show) {
             this.show = true;
             return;
@@ -13,6 +20,6 @@ export class Word {
     }
 
     public getClass(): string {
-        return 'card ' + ['', 'blue', 'red', 'death', 'neutral'][this.type] + (this.show ? ' show' : '') + (this.ignored ? ' ignored' : '');
+        return 'card ' + CardType[this.type].toLowerCase() + (this.show ? ' show' : '') + (this.ignored ? ' ignored' : '');
     }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DictionaryService } from 'src/app/core/services/dictionary.service';
-import { Word } from 'src/app/shared/models/word.model';
+import { Word, CardType } from 'src/app/shared/models/word.model';
 
 @Component({
   selector: 'app-root',
@@ -10,26 +10,35 @@ import { Word } from 'src/app/shared/models/word.model';
 export class RootComponent implements OnInit {
   private _words: string[];
   chosenWords: Word[];
+  private _wordsPerColor: Word[][];
   gameid = '';
   isCodeMaster = false;
   isGameStarted = false;
-  first = 0;
-  // TODO
-  BLUE = 1;
-  RED = 2;
-  DEATH = 3;
-  NEUTRAL = 4;
+  isDeath = false;
+  private _first: CardType;
 
   constructor(private dictionaryService: DictionaryService) { }
 
   ngOnInit() {
     this.chosenWords = [];
+    this._wordsPerColor = [];
+    window['Math'].seedrandom('Hello.');
     for (let i = 0; i < 25; i++) {
       this.chosenWords.push(new Word());
     }
     this.dictionaryService.getAll().subscribe(data => {
       this._words = data;
     });
+  }
+
+  get bluesLeft(): Word[] {
+    return this._wordsPerColor[CardType.BLUE];
+  }
+  get redsLeft(): Word[] {
+    return this._wordsPerColor[CardType.RED];
+  }
+  get goesFirst(): string {
+    return CardType[this._first].toLowerCase();
   }
 
   nextNumber(max: number): number {
@@ -44,7 +53,8 @@ export class RootComponent implements OnInit {
   }
 
   enter(asCodeMaster: boolean): void {
-    this.first = (this.nextNumber(2) === 0 ? this.BLUE : this.RED);
+    window['Math'].seedrandom(this.gameid);
+    this._first = (this.nextNumber(2) === 0 ? CardType.BLUE : CardType.RED);
     this.distributeColors();
     this.distributeWords();
     this.isCodeMaster = asCodeMaster;
@@ -53,29 +63,44 @@ export class RootComponent implements OnInit {
   }
 
   toggle(word: Word): void {
+    if (this._wordsPerColor[word.type]) {
+      this._wordsPerColor[word.type] = this._wordsPerColor[word.type].filter(w => w !== word);
+    }
+    if (word.type === CardType.DEATH) {
+      this.isDeath = !this.isDeath;
+    }
     word.toggle();
   }
-
 
   private distributeColors(): void {
     // 7 BLUE
     for (let i = 0; i < 7; i++) {
-      this.chosenWords[i].type = this.BLUE;
+      this.chosenWords[i].type = CardType.BLUE;
     }
     // 1 RANDOM BLUE OR RED
-    this.chosenWords[7].type = this.first;
+    this.chosenWords[7].type = this._first;
     // 7 RED
     for (let i = 8; i < 15; i++) {
-      this.chosenWords[i].type = this.RED;
+      this.chosenWords[i].type = CardType.RED;
     }
     // 1 BLACK
-    this.chosenWords[15].type = this.DEATH;
+    this.chosenWords[15].type = CardType.DEATH;
     // 9 NEUTRAL
     for (let i = 16; i < 25; i++) {
-      this.chosenWords[i].type = this.NEUTRAL;
+      this.chosenWords[i].type = CardType.NEUTRAL;
     }
+    this.addWordsToScore();
     this.shuffleChosenWords();
   }
+  private addWordsToScore(): void {
+    for (let i = 0; i < 25; i++) {
+      if (!this._wordsPerColor[this.chosenWords[i].type]) {
+        this._wordsPerColor[this.chosenWords[i].type] = [];
+      }
+      this._wordsPerColor[this.chosenWords[i].type].push(this.chosenWords[i]);
+    }
+  }
+
   private distributeWords(): void {
     this.shuffleWords();
     for (let i = 0; i < 25; i++) {

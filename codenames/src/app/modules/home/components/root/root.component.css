@@ -1,5 +1,11 @@
-.words {
+  .killed {
+    background-color: #111;
+    opacity: .8;
+  }
+
+  .words {
     min-width: 800px;
+    text-align: center;
   }
   .ignored{
       text-decoration: line-through;
@@ -14,7 +20,7 @@
     background: rgb(234, 200, 115);
     color: black;
     display: inline-block;
-    width: 14%;
+    width: 16%;
     margin: 1%;
     border-radius: 6px;
   
@@ -53,7 +59,6 @@
   }
     
   #first {
-    display: none;
     font-size: 24pt;
     font-family: arial;
     margin: 1%;
@@ -66,14 +71,12 @@
   }
   
   #lives-red {
-    display: inline-block;
     float: right;
     width: 20%;
     text-align: right;
   }
   
   #lives {
-    display: none;
     width: 100%;
     min-width: 800px;
   }
@@ -82,6 +85,9 @@
     font-weight: bold;
   }
   
+  .label {
+    text-transform: capitalize;
+  }
   .blue.label {
     color: #0e3298;
   }
