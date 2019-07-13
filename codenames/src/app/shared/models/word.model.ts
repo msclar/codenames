@@ -6,20 +6,19 @@ export enum CardType {
 }
 
 export class Word {
-    word: string;
-    type: CardType;
-    show: boolean;
-    ignored: boolean;
+    constructor(
+        public readonly word: string
+        , public readonly type: CardType
+    ) {
+        this.selected = false;
+    }
+    selected: boolean;
 
     public toggle(): void {
-        if (!this.show) {
-            this.show = true;
-            return;
-        }
-        this.ignored = !this.ignored;
+        this.selected = !this.selected;
     }
 
     public getClass(): string {
-        return 'card ' + CardType[this.type].toLowerCase() + (this.show ? ' show' : '') + (this.ignored ? ' ignored' : '');
+        return 'card'; // + CardType[this.type].toLowerCase() + (this.s ? ' show' : '') + (this.ignored ? ' ignored' : '');
     }
 }

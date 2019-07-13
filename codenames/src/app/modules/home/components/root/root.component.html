@@ -1,51 +1,18 @@
-<div [class]="'gameboard' + (this.isDeath ?' killed' : '')">
-    <nav class="nav navbar">
-        <a class="navbar-brand" href="" onclick="return confirm('Reset game?')">
-            <img src="./assets/detective.png" width="50" height="50" alt="Detective codenames">
+<div class="container-fluid">
+    <nav class="navbar navbar-fill">
+        <a class="navbar-brand" routerLink="start" title="New game">
+            <img src="./assets/detective.png" width="75" height="75" alt="Detective codenames">
         </a>
+        <div class="navbar-text">
+            <app-game-score></app-game-score>
+        </div>
     </nav>
-    <div *ngIf="!isGameStarted" class="startgame">
-        <form class="form justify-content-center">
-            <div class="form-group row">
-                <div class="col-3"></div>
-                <div class="col-6">
-                    <input type="text" class="form-control form-control-lg" name="gameid" placeholder="Type in Game ID"
-                        [(ngModel)]="gameid" />
-                </div>
-                <div class="col-3"></div>
-            </div>
-            <div class="form-group row">
-                <div class="col-3"></div>
-                <div class="col-3">
-                    <button type="button" class="btn btn-block btn-lg btn-dark" (click)="this.enter(true)"
-                        [disabled]="!this.canStartGame()">&gt;
-                        Enter as Code Master</button>
-                </div>
-                <div class="col-3">
-                    <button type="button" class="btn btn-block btn-lg btn-outline-dark" (click)="this.enter(false)"
-                        [disabled]="!this.canStartGame()">&gt;
-                        Enter as Gameboard</button>
-                </div>
-                <div class="col-3"></div>
-            </div>
-        </form>
+    <div class="mainframe">
+        <router-outlet></router-outlet>
     </div>
-    <div *ngIf="isGameStarted">
-        <div class="words">
-            <div *ngFor="let word of this.chosenWords" [class]="word.getClass()" (click)="this.toggle(word)">
-                {{word.word}}
-            </div>
+    <footer class="page-footer">
+        <div class="footer-copyright text-center py-3">
+            <small>&copy; TheSamwiser</small>
         </div>
-        <div id="first" *ngIf="this.isCodeMaster"><span [class]="this.goesFirst+' label'">{{this.goesFirst}}</span>
-            goes first
-        </div>
-        <div id="lives" *ngIf="!this.isCodeMaster">
-            <div id="lives-blue">
-                <div *ngFor="let word of this.bluesLeft" class="life blue"></div>
-            </div>
-            <div id="lives-red">
-                <div *ngFor="let word of this.redsLeft" class="life red"></div>
-            </div>
-        </div>
-    </div>
+    </footer>
 </div>

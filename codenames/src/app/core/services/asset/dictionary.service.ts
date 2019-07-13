@@ -8,7 +8,8 @@ export class DictionaryService {
   constructor(private http: HttpClient) {
   }
 
-  public getAll(): Observable<any> {
-    return this.http.get('./assets/dictionary-nl.json');
+  public getAll(): Observable<string[]> {
+    return this.http
+      .get<string[]>('./assets/dictionary-nl.json');
   }
 }

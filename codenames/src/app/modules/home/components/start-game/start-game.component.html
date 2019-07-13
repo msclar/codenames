@@ -1,0 +1,19 @@
+<div>
+    <form>
+        <div class="form-group">
+            <input type="text" class="form-control form-control-lg" name="gameid" id="gameid" placeholder="Type in Game ID"
+                [(ngModel)]="gameid" />
+        </div>
+        <div class="row" *ngIf="this.gameid">
+            <div class="col">
+                <button type="button" class="btn btn-block btn-lg btn-dark" (click)="this.enter(true)">
+                    &gt; Enter as Code Master</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-block btn-lg btn-outline-dark" (click)="this.enter(false)">
+                    &gt; Enter as Gameboard
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,116 @@
+.words {
+  min-width: 800px;
+  text-align: center;
+}
+
+.killed {
+  background-color: #111;
+  opacity: .8;
+}
+
+.ignored {
+  text-decoration: line-through;
+  color: #333;
+  opacity: 0.5;
+}
+
+.word {
+  font-size: 20px;
+  font-family: "arial";
+  font-weight: bold;
+  padding: 2%;
+  background: rgb(234, 200, 115);
+  color: black;
+  display: inline-block;
+  width: 16%;
+  margin: 1%;
+  border-radius: 6px;
+  user-select: none;
+  cursor: pointer;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(1.5);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.show {
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  animation-name: pop;
+  animation-duration: 0.5s;
+}
+
+.word.red.show {
+  color: white;
+  background: #af0000;
+}
+
+.word.blue.show {
+  color: white;
+  background: #0e3298;
+}
+
+.word.neutral.show {
+  background: #ddd;
+}
+
+.word.death.show {
+  color: white;
+  background: black;
+}
+
+#first {
+  font-size: 24pt;
+  font-family: arial;
+  margin: 1%;
+  padding-top: 20px;
+}
+
+#lives-blue {
+  display: inline-block;
+  width: 20%;
+}
+
+#lives-red {
+  float: right;
+  width: 20%;
+  text-align: right;
+}
+
+#lives {
+  width: 100%;
+  min-width: 800px;
+}
+
+.blue, .red {
+  font-weight: bold;
+}
+
+.label {
+  text-transform: capitalize;
+}
+
+.blue.label {
+  color: #0e3298;
+}
+
+.red.label {
+  color: #af0000;
+}
+
+.blue.life, .red.life {
+  display: inline-block;
+  border-radius: 6px;
+  width: 20%;
+  height: 20px;
+  background: #0e3298;
+  margin: 3%;
+}
+
+.red.life {
+  background: #af0000;
+}

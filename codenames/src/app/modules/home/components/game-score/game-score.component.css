@@ -1,0 +1,30 @@
+.scorestrip {
+  cursor: pointer;
+}
+
+.red {
+  color: white;
+  background: #af0000;
+}
+
+.blue {
+  color: white;
+  background: #0e3298;
+}
+
+.first {
+  font-size: 24pt;
+  font-family: arial;
+  margin: 1%;
+  padding-top: 20px;
+}
+
+.blue, .red {
+  font-weight: bold;
+  border-radius: 15px;
+  border: 1px solid black;
+  margin: 3px;
+  padding: 3px;
+  font-size: 50px;
+  display: inline;
+}

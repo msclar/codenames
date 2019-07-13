@@ -1,0 +1,14 @@
+<app-storefeedback [isFetching]="this.isFetching" [error]="this.error"></app-storefeedback>
+<div *ngIf="this.game">
+    <div [class]="'gameboard' + (this.isDeath ?' killed' : '')">
+        <div class="words">
+            <div *ngFor="let word of this.game.words; trackBy: word?.word" class="word"
+                [class]="this.getClassFor(word)" (click)="word.toggle()">
+                {{word.word}}
+            </div>
+        </div>
+        <div *ngIf="this.game.isLocalCodeMaster">
+
+        </div>
+    </div>
+</div>
