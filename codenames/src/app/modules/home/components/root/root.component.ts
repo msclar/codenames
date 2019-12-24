@@ -21,13 +21,11 @@ export class RootComponent implements OnInit, OnDestroy {
     private dictionaryStore: DictionaryStore,
     private gameStore: GamesStore,
     private router: Router,
-    private window: Window,
   ) { }
 
   ngOnInit() {
     if (environment.enableAnalytics) {
-      const ga = this.window['ga'];
-      console.log(ga);
+      const ga = window['ga'];
       if (ga) {
         ga('create', 'UA-154993310-1', 'auto');
         // subscribe to router events and send page views to Google Analytics

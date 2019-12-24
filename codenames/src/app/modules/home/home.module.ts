@@ -27,9 +27,6 @@ import { QRCodeModule } from 'angularx-qrcode';
     FormsModule,
     QRCodeModule,
   ],
-  providers: [{
-    provide: Window, useValue: window
-  }],
   bootstrap: [RootComponent],
   entryComponents: []
 })
