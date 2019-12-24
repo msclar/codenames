@@ -1,8 +1,21 @@
 <div>
     <form>
         <div class="form-group">
-            <input type="text" class="form-control form-control-lg" name="gameid" id="gameid" placeholder="Type in Game ID"
-                [(ngModel)]="gameid" />
+            <div class="input-group">
+                <div class="input-group-prepend" (click)="this.typeSecret = !this.typeSecret">
+                    <button class="input-group-text" id="typesecretcheck">
+                        <i class="fa" [class.fa-eye]="!this.typeSecret" [class.fa-eye-slash]="this.typeSecret"></i>
+                    </button>
+                </div>
+                <input [type]="this.typeSecret ? 'password' : 'text'" autocomplete="off"
+                    class="form-control form-control-lg" name="gameid" id="gameid" placeholder="Type in Game ID"
+                    [(ngModel)]="this.gameid" (change)="this.gameid = this.gameid.toLowerCase()" />
+                <div class="input-group-append" (click)="this.takeRandom()">
+                    <button class="input-group-text" id="takerandomcheck">
+                        <i class="fa fa-random"></i> Generate
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="row" *ngIf="this.gameid">
             <div class="col">
@@ -16,4 +29,8 @@
             </div>
         </div>
     </form>
+    <hr />
+    <div class="qrlink">
+        <qrcode [qrdata]="this.link" [size]="256" [level]="'M'"></qrcode>
+    </div>
 </div>

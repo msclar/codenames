@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-game-score',
   templateUrl: './game-score.component.html',
-  styleUrls: ['./game-score.component.css']
+  styleUrls: ['./game-score.component.scss']
 })
 export class GameScoreComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

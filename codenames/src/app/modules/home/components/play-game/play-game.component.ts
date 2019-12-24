@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-play-game',
   templateUrl: './play-game.component.html',
-  styleUrls: ['./play-game.component.css']
+  styleUrls: ['./play-game.component.scss']
 })
 export class PlayGameComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

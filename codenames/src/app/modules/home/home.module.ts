@@ -9,6 +9,7 @@ import { PlayGameComponent } from './components/play-game/play-game.component';
 import { StartGameComponent } from './components/start-game/start-game.component';
 import { StoreFeedbackComponent } from './components/storefeedback/storefeedback.component';
 import { GameScoreComponent } from './components/game-score/game-score.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
@@ -24,8 +25,11 @@ import { GameScoreComponent } from './components/game-score/game-score.component
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
+    QRCodeModule,
   ],
-  providers: [],
+  providers: [{
+    provide: Window, useValue: window
+  }],
   bootstrap: [RootComponent],
   entryComponents: []
 })
