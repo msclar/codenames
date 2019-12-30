@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   host: '',
   apiPrefix: '/games/codenames/api/',
-  enableAnalytics: false,
+  enableAnalytics: true,
 };
 
 /*

@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { GamesStore } from 'src/app/core/services/store/games.store';
 import { Router } from '@angular/router';
-import { Location, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
+import { GaService } from 'src/app/core/services/ext/ga.service';
 
 @Component({
   selector: 'app-start-game',
@@ -16,6 +17,7 @@ export class StartGameComponent implements OnInit {
   constructor(
     private gameStore: GamesStore,
     private router: Router,
+    private gaService: GaService,
     @Inject(DOCUMENT) private document: Document
   ) { }
 
@@ -24,6 +26,7 @@ export class StartGameComponent implements OnInit {
 
   enter(asCodeMaster: boolean): void {
     this.gameStore.createNew(this.gameid, asCodeMaster);
+    this.gaService.emitEvent('codenames', 'start', this.gameid, asCodeMaster ? 1 : 0);
     this.router.navigate(['/play']);
   }
 

@@ -10,6 +10,7 @@ import { StartGameComponent } from './components/start-game/start-game.component
 import { StoreFeedbackComponent } from './components/storefeedback/storefeedback.component';
 import { GameScoreComponent } from './components/game-score/game-score.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { GaService } from 'src/app/core/services/ext/ga.service';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,9 @@ import { QRCodeModule } from 'angularx-qrcode';
     HttpClientModule,
     FormsModule,
     QRCodeModule,
+  ],
+  providers: [
+    GaService
   ],
   bootstrap: [RootComponent],
   entryComponents: []

@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Router, NavigationEnd } from '@angular/router';
+import { GaService } from 'src/app/core/services/ext/ga.service';
 
 @Component({
   selector: 'app-root',
@@ -20,14 +21,14 @@ export class RootComponent implements OnInit, OnDestroy {
   constructor(
     private dictionaryStore: DictionaryStore,
     private gameStore: GamesStore,
+    private gaService: GaService,
     private router: Router,
   ) { }
 
   ngOnInit() {
     if (environment.enableAnalytics) {
-      const ga = window['ga'];
-      if (ga) {
-        ga('create', 'UA-154993310-1', 'auto');
+      if (this.gaService.isEnabled()) {
+        this.gaService.create();
         // subscribe to router events and send page views to Google Analytics
         this.router.events
           .pipe(takeUntil(this.unsubscribe))
@@ -35,8 +36,7 @@ export class RootComponent implements OnInit, OnDestroy {
             if (!(event instanceof NavigationEnd)) {
               return;
             }
-            ga('set', 'page', event.urlAfterRedirects);
-            ga('send', 'pageview');
+            this.gaService.pageVisited(event.urlAfterRedirects);
           });
       }
     }
