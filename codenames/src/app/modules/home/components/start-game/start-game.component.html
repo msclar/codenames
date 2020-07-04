@@ -1,36 +1,49 @@
-<div>
-    <form>
+<div class="container center-block align-content-around flex-wrap">
+  <div class="row justify-content-md-center">
+      <div class="h1 text-center justify-content-md-center">
+  Codenames
+      </div>
+      <div class="text-justify">
+  Play Codenames online across multiple devices on a shared board. To create a new game or join an existing game, enter a game identifier and click 'Go'.
+
+  All your gameplays will help the research community understand how humans communicate. So you're playing while helping science!
+      </div>
+  </div>
+  <br>
+  <form class="row justify-content-md-center">
         <div class="form-group">
             <div class="input-group">
-                <div class="input-group-prepend" (click)="this.typeSecret = !this.typeSecret">
-                    <button class="input-group-text" id="typesecretcheck">
-                        <i class="fa" [class.fa-eye]="!this.typeSecret" [class.fa-eye-slash]="this.typeSecret"></i>
-                    </button>
-                </div>
-                <input [type]="this.typeSecret ? 'password' : 'text'" autocomplete="off"
-                    class="form-control form-control-lg" name="gameid" id="gameid" placeholder="Type in Game ID"
+                <input [type]="'text'" autoFocus
+                    class="form-control form-control-lg" name="gameid" ng-model="gameid" id="gameid" placeholder="Type in Game ID"
                     [(ngModel)]="this.gameid" (change)="this.gameid = this.gameid.toLowerCase()" />
-                <div class="input-group-append" (click)="this.takeRandom()">
-                    <button class="input-group-text" id="takerandomcheck">
-                        <i class="fa fa-random"></i> Generate
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-success btn-lg" id="takerandomcheck" (click)="this.enter()">
+                      Start or join game
                     </button>
                 </div>
             </div>
-        </div>
-        <div class="row" *ngIf="this.gameid">
-            <div class="col">
-                <button type="button" class="btn btn-block btn-lg btn-dark" (click)="this.enter(true)">
-                    &gt; Enter as Code Master</button>
-            </div>
-            <div class="col">
-                <button type="button" class="btn btn-block btn-lg btn-outline-dark" (click)="this.enter(false)">
-                    &gt; Enter as Gameboard
-                </button>
+            <br>
+            <h4>Languages</h4>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-secondary active">
+                <input type="radio" name="language" ng-model="language" id="english" (click)="this.language = 'English (Original)'" autocomplete="off" checked> English (Original)
+              </label>
+              <label class="btn btn-secondary">
+                <input type="radio" name="language" ng-model="language" id="spanish" (click)="this.language = 'Spanish'"autocomplete="off"> Spanish
+              </label>
+              <label class="btn btn-secondary">
+                <input type="radio" name="language" ng-model="language" id="french" (click)="this.language = 'French'" autocomplete="off"> French
+              </label>
             </div>
         </div>
     </form>
     <hr />
     <div class="qrlink">
-        <qrcode [qrdata]="this.link" [size]="256" [level]="'M'"></qrcode>
+        <qrcode [qrdata]="this.link" [size]="75" [level]="'M'"></qrcode>
     </div>
+    <footer class="page-footer">
+        <div class="footer-copyright text-center py-3">
+            <small>Code available at github, modified from Sam Weiser's original project</small>
+        </div>
+    </footer>
 </div>

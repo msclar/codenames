@@ -59,13 +59,25 @@ export class GameScoreComponent implements OnInit, OnDestroy {
     return this.total(CardType.RED);
   }
 
+  get isCodemaster(): boolean {
+    return this.game.codemasterScreen;
+  }
 
+  get bluePlays(): boolean {
+    return this.game.bluePlays;
+  }
 
-  get goesFirst(): CardType {
-    return this.game.words
-      .filter(w => w.type === CardType.BLUE)
-      .length === 9
-      ? CardType.BLUE
-      : CardType.RED;
+  textToDisplay() {
+    const player = this.bluePlays ? 'blue' : 'red';
+    let text = '';
+    if (this.game && this.game.gameHasStarted && !this.game.codemasterHasToPlay) {
+      text += player + ' codemaster gave clue ';
+      text += this.game.currentWordHint + ' ' + this.game.currentNumberHint;
+      text += ' to their team ---- ';
+      text += this.game.clickedOnCurrentTurn;
+    } else {
+      text += player + ' codemaster\'s turn';
+    }
+    return text;
   }
 }

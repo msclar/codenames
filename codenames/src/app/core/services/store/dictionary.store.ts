@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { StoreService } from './stores';
 import { CacheExpiry } from '../../util/cache-expiry';
-import { DictionaryService } from '../asset/dictionary.service';
+import {DictionaryService, LanguageEntry} from '../asset/dictionary.service';
 
 @Injectable({ providedIn: 'root' })
-export class DictionaryStore extends StoreService<string[]> {
+export class DictionaryStore extends StoreService<LanguageEntry[]> {
     private cacheExpiry = new CacheExpiry();
 
     constructor(private restService: DictionaryService) {
@@ -22,7 +22,7 @@ export class DictionaryStore extends StoreService<string[]> {
             .getAll()
             .pipe(
                 super.catchErrorAndReset(),
-                tap((next: string[]) => {
+                tap((next: LanguageEntry[]) => {
                     this.store$.next({
                         ...this.store$.value,
                         data: next,
@@ -40,3 +40,4 @@ export class DictionaryStore extends StoreService<string[]> {
         this.fetchData();
     }
 }
+

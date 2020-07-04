@@ -1,18 +1,8 @@
 <div class="container-fluid">
-    <nav class="navbar navbar-fill">
-        <a class="navbar-brand" routerLink="start" title="New game">
-            <img src="./assets/detective.png" width="75" height="75" alt="Detective codenames">
-        </a>
-        <div class="navbar-text">
-            <app-game-score></app-game-score>
-        </div>
-    </nav>
+    <div class="container my-lg-4">
+        <app-game-score></app-game-score>
+    </div>
     <div class="mainframe">
         <router-outlet></router-outlet>
     </div>
-    <footer class="page-footer">
-        <div class="footer-copyright text-center py-3">
-            <small>&copy; TheSamwiser</small>
-        </div>
-    </footer>
 </div>
