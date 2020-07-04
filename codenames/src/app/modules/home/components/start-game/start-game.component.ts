@@ -10,23 +10,26 @@ import { GaService } from 'src/app/core/services/ext/ga.service';
   styleUrls: ['./start-game.component.scss']
 })
 export class StartGameComponent implements OnInit {
-  gameid = '';
-  typeSecret = true;
-  startRandom = false;
+  public gameid;
+  private language;
 
   constructor(
     private gameStore: GamesStore,
     private router: Router,
     private gaService: GaService,
     @Inject(DOCUMENT) private document: Document
-  ) { }
+  ) {
+    this.gameid = this.generateRandomString(10);
+    this.language = 'English (Original)';
+  }
 
   ngOnInit() {
   }
 
-  enter(asCodeMaster: boolean): void {
-    this.gameStore.createNew(this.gameid, asCodeMaster);
-    this.gaService.emitEvent('codenames', 'start', this.gameid, asCodeMaster ? 1 : 0);
+  enter(): void {
+//    this.language = language;
+    this.gameStore.createNew(this.gameid, this.language);
+    this.gaService.emitEvent('codenames', 'start', this.gameid, 1);
     this.router.navigate(['/play']);
   }
 

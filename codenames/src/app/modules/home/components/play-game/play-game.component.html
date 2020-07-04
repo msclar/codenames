@@ -1,14 +1,44 @@
 <app-storefeedback [isFetching]="this.isFetching" [error]="this.error"></app-storefeedback>
 <div *ngIf="this.game">
     <div [class]="'gameboard' + (this.isDeath ?' killed' : '')">
+        <div class="d-flex justify-content-center mt-lg-4">
+            <form class="d-flex justify-content-center mt-lg-4 form-inline" *ngIf="this.game.codemasterScreen">
+                <input (keypress)="noSpacesAllowed($event)" type="text" class="form-control mb-2 mr-sm-2" #wordClue
+                       name="wordClue" placeholder="One-word clue" autocomplete="off" required minlength="2"
+                       [(ngModel)]="this.game.currentWordHint" (change)="this.game.currentWordHint = this.game.currentWordHint.toLowerCase()">
+                <div class="input-group mb-2 mr-sm-2">
+                    <input type="text" class="form-control" #numberClue name="numberClue" placeholder="Number of words"
+                           (keypress)="numberOnly($event)" [type]="'text'" autocomplete="off" value=""
+                           [(ngModel)]="this.game.currentNumberHint"
+                           (change)="this.game.currentNumberHint = 1 * this.game.currentNumberHint">
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2" [disabled]="!this.game.codemasterHasToPlay"
+                        (click)="codemasterGivesClue(); wordClue.value = ''; numberClue.value = ''">Submit</button>
+            </form>
+
+            <button class="d-flex justify-content-center mt-lg-4 btn btn-primary" *ngIf="!this.game.codemasterScreen"
+              [disabled]="this.game.codemasterHasToPlay" (click)="this.game.codemasterHasToPlay = true; this.game.changeActiveTeam();">
+              Concede turn
+            </button>
+        </div>
+
         <div class="words">
             <div *ngFor="let word of this.game.words; trackBy: word?.word" class="word"
-                [class]="this.getClassFor(word)" (click)="word.toggle()">
+                [class]="this.getClassFor(word)" (click)="this.game.update(word)">
                 {{word.word}}
             </div>
         </div>
-        <div *ngIf="this.game.isLocalCodeMaster">
-
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-warning active">
+            <input type="radio" name="options" id="option1" autocomplete="off" (click)="this.game.codemasterScreen = false;" checked> Player
+          </label>
+          <label class="btn btn-warning">
+            <input type="radio" name="options" id="option3" autocomplete="off" (click)="this.game.codemasterScreen = true;"> Codemaster
+          </label>
         </div>
     </div>
+  <footer class="page-footer text-sm-center">
+    To come back to this game, enter: <b>{{this.game.seed}}</b> and language: <b>{{this.game.language}}</b>
+  </footer>
 </div>

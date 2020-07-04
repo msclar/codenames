@@ -48,12 +48,31 @@ export class PlayGameComponent implements OnInit, OnDestroy {
 
   getClassFor(word: Word): string {
     let cs = 'word';
-    if (this.game.isLocalCodeMaster || word.selected) {
-      cs += ' show ' + CardType[word.type].toLowerCase();
-      if (this.game.isLocalCodeMaster && word.selected) {
+    if (this.game.codemasterScreen || word.selected) {
+      cs += ' show ' + (this.game.codemasterScreen ? 'codemaster ' : '') + CardType[word.type].toLowerCase();
+      if (this.game.codemasterScreen && word.selected) {
         cs += ' ignored';
       }
     }
     return cs;
+  }
+
+  numberOnly(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
+  noSpacesAllowed(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    return !(charCode === 32);
+  }
+
+  codemasterGivesClue(): void {
+    this.game.dump();
+    this.game.codemasterHasToPlay = false;
+    this.game.gameHasStarted = true;
   }
 }

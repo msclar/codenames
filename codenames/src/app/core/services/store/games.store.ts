@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { tap, withLatestFrom, filter, map } from 'rxjs/operators';
+import {tap, filter, map} from 'rxjs/operators';
 import { StoreService, Store } from './stores';
 import { Game } from 'src/app/shared/models/game.model';
 import { Word, CardType } from 'src/app/shared/models/word.model';
-import { DictionaryStore } from './dictionary.store';
+import {DictionaryStore} from './dictionary.store';
+import {LanguageEntry} from '../asset/dictionary.service';
 
 @Injectable({ providedIn: 'root' })
 export class GamesStore extends StoreService<Game> {
@@ -12,22 +13,32 @@ export class GamesStore extends StoreService<Game> {
         private dictionaryStore: DictionaryStore
     ) {
         super();
+
     }
 
-    public createNew(gameId: string, isLocalCodeMaster: boolean): void {
+    public createNew(gameId: string, language: string): void {
         this.setStateFetching();
         this.dictionaryStore.store$
             .pipe(
-                filter((data: Store<string[]>) => !data.error && !data.isFetching && data.data !== null)
-                , map((data: Store<string[]>) => data.data)
-                , tap((data: string[]) => this.next(this.createGameFor(gameId, isLocalCodeMaster, data)))
+                filter((data: Store<LanguageEntry[]>) => !data.error && !data.isFetching && data.data !== null)
+                , tap(ev => console.log('a', ev))
+                , map((datas: Store<LanguageEntry[]>) => datas.data[language])
+                , tap(ev => console.log('b', ev))
+                , map ((data: string[]) => this.next(this.createGameFor(gameId, language, data)))
             )
             .subscribe();
     }
 
-    private createGameFor(gameId: string, isLocalCodeMaster: boolean, words: string[]): Game {
-        const game = new Game(gameId, isLocalCodeMaster);
+    private blueGoesFirst(game: Game): boolean {
+      return game.words
+        .filter(w => w.type === CardType.BLUE)
+        .length === 9;
+    }
+
+    private createGameFor(gameId: string, language: string, words: string[]): Game {
+        const game = new Game(gameId, language);
         this.addWords(game, words);
+        game.bluePlays = this.blueGoesFirst(game);
         return game;
     }
 
@@ -36,7 +47,7 @@ export class GamesStore extends StoreService<Game> {
         fromWords.sort(); // always start from the same sequence before shuffling
         this.shuffle(fromWords, count);
         for (let i = 0; i < count; i++) {
-            game.words.push(new Word(fromWords[i], this.cardType(i)));
+            game.words.push(new Word(fromWords[i].toLocaleLowerCase(), this.cardType(i)));
         }
         this.shuffle(game.words, count);
     }

@@ -14,11 +14,20 @@ export class Word {
     }
     selected: boolean;
 
-    public toggle(): void {
-        this.selected = !this.selected;
+    public click(isCodemasterScreen: boolean, codemasterHasToPlay: boolean): boolean {
+        console.log('clicked');
+        if (!this.selected && !isCodemasterScreen && !codemasterHasToPlay) {
+          this.selected = !this.selected;
+          return true;
+        }
+        return false;
     }
 
-    public getClass(): string {
-        return 'card'; // + CardType[this.type].toLowerCase() + (this.s ? ' show' : '') + (this.ignored ? ' ignored' : '');
+    public cardType(): CardType {
+        return this.type;
+    }
+
+    public stringy(): string {
+        return this.word;
     }
 }

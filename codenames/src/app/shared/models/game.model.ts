@@ -1,10 +1,57 @@
-import { Word } from './word.model';
+import {CardType, Word} from './word.model';
 
 export class Game {
     constructor(
-        public readonly seed: string
-        , public readonly isLocalCodeMaster: boolean
+        public readonly seed: string,
+        public readonly language: string
     ) {
     }
     words: Word[] = [];
+    bluePlays = true;
+    codemasterHasToPlay = true;
+    codemasterScreen = false;
+    gameHasStarted = false;
+    currentWordHint = '';
+    currentNumberHint = 0;
+    clickedOnCurrentTurn = 0;
+
+    changeActiveTeam() {
+      this.bluePlays = !this.bluePlays;
+      this.clickedOnCurrentTurn = 0;
+    }
+
+    update(word: Word) {
+      const clicked = word.click(this.codemasterScreen, this.codemasterHasToPlay);
+
+      if (clicked) {
+        this.dump();
+        this.clickedOnCurrentTurn += 1;
+        if (!(word.cardType() === CardType.BLUE && this.bluePlays) &&
+            !(word.cardType() === CardType.RED && !this.bluePlays)) {
+          this.codemasterHasToPlay = true;
+          this.changeActiveTeam();
+        }
+
+        if (this.currentNumberHint > 0 && this.clickedOnCurrentTurn === this.currentNumberHint + 1) {
+          this.codemasterHasToPlay = true;
+          this.changeActiveTeam();
+        }
+      }
+      // todo: add shading for dead cards
+    }
+
+    dump() {
+      const obj = {
+         table: []
+      };
+      obj.table.push({'words': this.words,
+                      'bluePlays': this.bluePlays,
+                      'codemasterHasToPlay': this.codemasterHasToPlay,
+                      'currentWordHint': this.currentWordHint,
+                      'currentNumberHint': this.currentNumberHint,
+                      'clickedOnCurrentTurn': this.clickedOnCurrentTurn});
+
+      const json = JSON.stringify(obj);
+      console.log(json);
+    }
 }
