@@ -59,10 +59,6 @@ export class GameScoreComponent implements OnInit, OnDestroy {
     return this.total(CardType.RED);
   }
 
-  get isCodemaster(): boolean {
-    return this.game.codemasterScreen;
-  }
-
   get bluePlays(): boolean {
     return this.game.bluePlays;
   }

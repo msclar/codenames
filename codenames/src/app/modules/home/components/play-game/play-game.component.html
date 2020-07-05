@@ -14,12 +14,12 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary mb-2" [disabled]="!this.game.codemasterHasToPlay"
-                        (click)="codemasterGivesClue(); wordClue.value = ''; numberClue.value = ''">Submit</button>
+                        (click)="this.game.codemasterGivesClue(); wordClue.value = ''; numberClue.value = ''">Submit</button>
             </form>
 
             <button class="d-flex justify-content-center mt-lg-4 btn btn-primary" *ngIf="!this.game.codemasterScreen"
               [disabled]="this.game.codemasterHasToPlay" (click)="this.game.codemasterHasToPlay = true; this.game.changeActiveTeam();">
-              Concede turn
+              End turn
             </button>
         </div>
 

@@ -69,10 +69,4 @@ export class PlayGameComponent implements OnInit, OnDestroy {
     const charCode = (event.which) ? event.which : event.keyCode;
     return !(charCode === 32);
   }
-
-  codemasterGivesClue(): void {
-    this.game.dump();
-    this.game.codemasterHasToPlay = false;
-    this.game.gameHasStarted = true;
-  }
 }

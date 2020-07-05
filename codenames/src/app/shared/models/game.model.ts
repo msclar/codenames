@@ -37,7 +37,12 @@ export class Game {
           this.changeActiveTeam();
         }
       }
-      // todo: add shading for dead cards
+    }
+
+    codemasterGivesClue(): void {
+      this.codemasterHasToPlay = false;
+      this.gameHasStarted = true;
+      this.dump();
     }
 
     dump() {

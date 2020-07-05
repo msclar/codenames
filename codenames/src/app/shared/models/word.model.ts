@@ -15,7 +15,6 @@ export class Word {
     selected: boolean;
 
     public click(isCodemasterScreen: boolean, codemasterHasToPlay: boolean): boolean {
-        console.log('clicked');
         if (!this.selected && !isCodemasterScreen && !codemasterHasToPlay) {
           this.selected = !this.selected;
           return true;
