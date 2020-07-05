@@ -25,7 +25,7 @@
 
         <div class="words">
             <div *ngFor="let word of this.game.words; trackBy: word?.word" class="word"
-                [class]="this.getClassFor(word)" (click)="this.game.update(word)">
+                [class]="this.getClassFor(word)" (click)="this.game.updateClickedClue(word)">
                 {{word.word}}
             </div>
         </div>
