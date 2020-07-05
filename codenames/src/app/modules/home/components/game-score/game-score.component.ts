@@ -62,18 +62,4 @@ export class GameScoreComponent implements OnInit, OnDestroy {
   get bluePlays(): boolean {
     return this.game.bluePlays;
   }
-
-  textToDisplay() {
-    const player = this.bluePlays ? 'blue' : 'red';
-    let text = '';
-    if (this.game && this.game.gameHasStarted && !this.game.codemasterHasToPlay) {
-      text += player + ' codemaster gave clue ';
-      text += this.game.currentWordHint + ' ' + this.game.currentNumberHint;
-      text += ' to their team ---- ';
-      text += this.game.clickedOnCurrentTurn;
-    } else {
-      text += player + ' codemaster\'s turn';
-    }
-    return text;
-  }
 }

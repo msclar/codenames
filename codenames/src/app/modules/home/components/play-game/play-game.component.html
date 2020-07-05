@@ -8,12 +8,12 @@
                        [(ngModel)]="this.game.currentWordHint" (change)="this.game.currentWordHint = this.game.currentWordHint.toLowerCase()">
                 <div class="input-group mb-2 mr-sm-2">
                     <input type="text" class="form-control" #numberClue name="numberClue" placeholder="Number of words"
-                           (keypress)="numberOnly($event)" [type]="'text'" autocomplete="off" value=""
+                           (keypress)="numberOnly($event)" autocomplete="off"
                            [(ngModel)]="this.game.currentNumberHint"
                            (change)="this.game.currentNumberHint = 1 * this.game.currentNumberHint">
                 </div>
 
-                <button type="submit" class="btn btn-primary mb-2" [disabled]="!this.game.codemasterHasToPlay"
+                <button type="submit" class="btn btn-primary mb-2" [disabled]="!this.game.codemasterHasToPlay || this.game.currentNumberHint > 25 || this.game.currentNumberHint < 0"
                         (click)="this.game.codemasterGivesClue(); wordClue.value = ''; numberClue.value = ''">Submit</button>
             </form>
 
@@ -34,7 +34,7 @@
             <input type="radio" name="options" id="option1" autocomplete="off" (click)="this.game.codemasterScreen = false;" checked> Player
           </label>
           <label class="btn btn-warning">
-            <input type="radio" name="options" id="option3" autocomplete="off" (click)="this.game.codemasterScreen = true;"> Codemaster
+            <input type="radio" name="options" id="option3" autocomplete="off" (click)="this.game.codemasterScreen = true;"> Spymaster
           </label>
         </div>
     </div>
