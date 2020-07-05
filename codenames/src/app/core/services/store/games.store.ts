@@ -10,7 +10,7 @@ import {LanguageEntry} from '../asset/dictionary.service';
 export class GamesStore extends StoreService<Game> {
 
     constructor(
-        private dictionaryStore: DictionaryStore
+      private dictionaryStore: DictionaryStore
     ) {
         super();
 
@@ -21,9 +21,7 @@ export class GamesStore extends StoreService<Game> {
         this.dictionaryStore.store$
             .pipe(
                 filter((data: Store<LanguageEntry[]>) => !data.error && !data.isFetching && data.data !== null)
-                , tap(ev => console.log('a', ev))
                 , map((datas: Store<LanguageEntry[]>) => datas.data[language])
-                , tap(ev => console.log('b', ev))
                 , map ((data: string[]) => this.next(this.createGameFor(gameId, language, data)))
             )
             .subscribe();

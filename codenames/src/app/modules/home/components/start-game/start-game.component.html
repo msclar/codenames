@@ -26,13 +26,19 @@
             <h4>Languages</h4>
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
               <label class="btn btn-secondary active">
-                <input type="radio" name="language" ng-model="language" id="english" (click)="this.language = 'English (Original)'" autocomplete="off" checked> English (Original)
+                <input type="radio" (click)="this.updateLang('en')" autocomplete="off" checked> English (Original)
               </label>
               <label class="btn btn-secondary">
-                <input type="radio" name="language" ng-model="language" id="spanish" (click)="this.language = 'Spanish'"autocomplete="off"> Spanish
+                <input type="radio" (click)="this.updateLang('sp')" autocomplete="off"> Spanish
               </label>
               <label class="btn btn-secondary">
-                <input type="radio" name="language" ng-model="language" id="french" (click)="this.language = 'French'" autocomplete="off"> French
+                <input type="radio" (click)="this.updateLang('fr')" autocomplete="off"> French
+              </label>
+              <label class="btn btn-secondary">
+                <input type="radio" (click)="this.updateLang('pt')" autocomplete="off"> Portuguese
+              </label>
+              <label class="btn btn-secondary">
+                <input type="radio" (click)="this.updateLang('jp')" autocomplete="off"> Japanese
               </label>
             </div>
         </div>
