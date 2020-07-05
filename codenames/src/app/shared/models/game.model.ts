@@ -20,11 +20,24 @@ export class Game {
       this.clickedOnCurrentTurn = 0;
     }
 
-    update(word: Word) {
+    updateFromState(obj) {
+      this.bluePlays = obj['bluePlays'];
+      this.codemasterHasToPlay = obj['codemasterHasToPlay'];
+      this.currentWordHint = obj['currentWordHint'];
+      this.currentNumberHint = obj['currentNumberHint'];
+      this.clickedOnCurrentTurn = obj['clickedOnCurrentTurn'];
+
+      const words = [];
+      for (let i = 0; i < obj['words'].length; i++) {
+        words.push(new Word(obj['words'][i]['word'], obj['words'][i]['type'], obj['words'][i]['selected']));
+      }
+      this.words = words;
+    }
+
+    updateClickedClue(word: Word) {
       const clicked = word.click(this.codemasterScreen, this.codemasterHasToPlay);
 
       if (clicked) {
-        this.dump();
         this.clickedOnCurrentTurn += 1;
         if (!(word.cardType() === CardType.BLUE && this.bluePlays) &&
             !(word.cardType() === CardType.RED && !this.bluePlays)) {
@@ -36,10 +49,12 @@ export class Game {
           this.codemasterHasToPlay = true;
           this.changeActiveTeam();
         }
+        this.dump();
       }
     }
 
     codemasterGivesClue(): void {
+      // currentWordHint and currentNumberHint are updated directly in the form
       this.codemasterHasToPlay = false;
       this.gameHasStarted = true;
       this.dump();

@@ -61,7 +61,6 @@ export class StartGameComponent implements OnInit {
   }
 
   private generateRandomString(): string {
-    console.log(wordsForGameId);
     let res = wordsForGameId[Math.floor(Math.random() * wordsForGameId.length)];
     for (let i = 0; i < 2; i++) {
       res += '-' + wordsForGameId[Math.floor(Math.random() * wordsForGameId.length)];
