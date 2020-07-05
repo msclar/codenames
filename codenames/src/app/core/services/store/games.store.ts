@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import {tap, filter, map} from 'rxjs/operators';
 import { StoreService, Store } from './stores';
 import { Game } from 'src/app/shared/models/game.model';
@@ -10,7 +11,8 @@ import {LanguageEntry} from '../asset/dictionary.service';
 export class GamesStore extends StoreService<Game> {
 
     constructor(
-      private dictionaryStore: DictionaryStore
+      private dictionaryStore: DictionaryStore,
+      private http: HttpClient
     ) {
         super();
 
@@ -34,7 +36,7 @@ export class GamesStore extends StoreService<Game> {
     }
 
     private createGameFor(gameId: string, language: string, words: string[]): Game {
-        const game = new Game(gameId, language);
+        const game = new Game(this.http, gameId, language);
         this.addWords(game, words);
         game.bluePlays = this.blueGoesFirst(game);
         return game;

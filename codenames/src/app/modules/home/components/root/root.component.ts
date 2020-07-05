@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { DictionaryStore } from 'src/app/core/services/store/dictionary.store';
 import { GamesStore } from 'src/app/core/services/store/games.store';
 import { Game } from 'src/app/shared/models/game.model';

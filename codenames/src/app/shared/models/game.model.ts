@@ -1,10 +1,14 @@
 import {CardType, Word} from './word.model';
+import { HttpClient } from '@angular/common/http';
+
 
 export class Game {
     constructor(
+        private http: HttpClient,
         public readonly seed: string,
         public readonly language: string
     ) {
+        this.refresh(seed, language);
     }
     words: Word[] = [];
     bluePlays = true;
@@ -15,17 +19,27 @@ export class Game {
     currentNumberHint = 0;
     clickedOnCurrentTurn = 0;
 
+    refresh(gameid, lang) {
+        this.http.get<any>('/codenamesserver/get?lang=' + lang + "&gameid=" + gameid).subscribe(data => {
+            this.updateFromState(data.state);
+            setTimeout(() => {this.refresh(gameid, lang);}, 250);
+        });
+    }
+
     changeActiveTeam() {
       this.bluePlays = !this.bluePlays;
       this.clickedOnCurrentTurn = 0;
     }
 
     updateFromState(obj) {
+      if (obj['initialstate']) { return; }
+    
       this.bluePlays = obj['bluePlays'];
       this.codemasterHasToPlay = obj['codemasterHasToPlay'];
       this.currentWordHint = obj['currentWordHint'];
       this.currentNumberHint = obj['currentNumberHint'];
       this.clickedOnCurrentTurn = obj['clickedOnCurrentTurn'];
+      this.gameHasStarted = obj['gameHasStarted']
 
       const words = [];
       for (let i = 0; i < obj['words'].length; i++) {
@@ -34,7 +48,21 @@ export class Game {
       this.words = words;
     }
 
+    getstate() { // La mas o menos la inversa de updateFromState
+        var ret = {};
+        ret['bluePlays'] = this.bluePlays;
+        ret['codemasterHasToPlay'] = this.codemasterHasToPlay;
+        ret['currentWordHint'] = this.currentWordHint;
+        ret['currentNumberHint'] = this.currentNumberHint;
+        ret['clickedOnCurrentTurn'] = this.clickedOnCurrentTurn;
+        ret['gameHasStarted'] = this.gameHasStarted;
+        ret['words'] = this.words; // Supongo que no hace falta deep copy?
+        ret['initialstate'] = false;
+        return ret;
+    }
+
     updateClickedClue(word: Word) {
+      const prev = this.getstate()
       const clicked = word.click(this.codemasterScreen, this.codemasterHasToPlay);
 
       if (clicked) {
@@ -49,18 +77,19 @@ export class Game {
           this.codemasterHasToPlay = true;
           this.changeActiveTeam();
         }
-        this.dump();
+        this.dump(prev);
       }
     }
 
     codemasterGivesClue(): void {
+      const prev = this.getstate()
       // currentWordHint and currentNumberHint are updated directly in the form
       this.codemasterHasToPlay = false;
       this.gameHasStarted = true;
-      this.dump();
+      this.dump(prev);
     }
 
-    dump() {
+    dump(prev) {
       const obj = {
          table: []
       };
@@ -71,7 +100,8 @@ export class Game {
                       'currentNumberHint': this.currentNumberHint,
                       'clickedOnCurrentTurn': this.clickedOnCurrentTurn});
 
-      const json = JSON.stringify(obj);
+      const json = this.getstate(); //JSON.stringify(obj);
+      this.http.post<any>('/codenamesserver/update', { lang: this.language , gameid : this.seed, prevstate : prev, state : json }).subscribe(data => {});
       console.log(json);
     }
 }

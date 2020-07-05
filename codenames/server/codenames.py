@@ -12,6 +12,8 @@ MAX_MESSAGE_LEN = 10000
 SLEEP_TIME = 50
 LONG_POLL_MAX_TIME = 2000
 
+INITIAL = {"initialstate" : True}
+
 @post('/update')
 def codenamesUpdate():
     body = request.body.read(MAX_MESSAGE_LEN + 1)
@@ -25,7 +27,8 @@ def codenamesUpdate():
         prevstate = data["prevstate"]
         state = data["state"]
         with mutex:
-            if readstate(lang, gameid) != prevstate:
+            s = readstate(lang, gameid)
+            if s != INITIAL and s != prevstate:
                 return {"error" : "prevstate is not up to date"}
             writestate(lang, gameid, state)
         return {"success" : True}
@@ -41,7 +44,7 @@ def valid(lang, gameid):
 
 def writestate(lang, gameid, state):
     if not valid(lang, gameid):
-        return {}
+        return INITIAL
     with mutex:
         with open(datadir + lang + "/" + gameid, "w") as f:
             json.dump(state, f)
@@ -49,18 +52,18 @@ def writestate(lang, gameid, state):
 
 def readstate(lang, gameid):
     if not valid(lang, gameid):
-        return {}
+        return INITIAL
     with mutex:
         try:
             with open(datadir + lang + "/" + gameid, "r") as f:
                 return json.load(f)
         except IOError:
-            return {}
+            return INITIAL
 
 @route('/get')
 def codenamesGet():
     if not request.params.lang or not request.params.gameid:
-        return {}
+        return INITIAL
     lang = request.params.lang
     gameid = request.params.gameid
     totalWait = 0
