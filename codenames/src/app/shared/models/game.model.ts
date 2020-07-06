@@ -26,18 +26,18 @@ export class Game {
         });
     }
 
-    changeActiveTeam() {
-      this.codemasterHasToPlay = true;
-      this.bluePlays = !this.bluePlays;
-      this.clickedOnCurrentTurn = 0;
-      this.currentWordHint = '';
-      this.currentNumberHint = 0;
+    changeActiveTeam(newstate) {
+      newstate.codemasterHasToPlay = true;
+      newstate.bluePlays = !newstate.bluePlays;
+      newstate.clickedOnCurrentTurn = 0;
+      newstate.currentWordHint = '';
+      newstate.currentNumberHint = 0;
     }
 
     endTurn() {
-        const prev = this.getstate();
-        this.changeActiveTeam();
-        this.dump(prev);
+        const newstate = this.getstate();
+        this.changeActiveTeam(newstate);
+        this.dump(this.getstate(), newstate);
     }
 
     updateFromState(obj) {
@@ -80,47 +80,41 @@ export class Game {
     }
 
     updateClickedClue(word: Word) {
-      const prev = this.getstate()
+      const newstate = this.getstate();
+      for (let i = 0; i < newstate['words'].length; i++) {
+        if (newstate['words'][i].word === word.word) {
+            word = newstate['words'][i];
+            break;
+        }
+      }
       const clicked = word.click(this.codemasterScreen, this.codemasterHasToPlay);
 
       if (clicked) {
-        this.clickedOnCurrentTurn += 1;
-        if (!(word.cardType() === CardType.BLUE && this.bluePlays) &&
-            !(word.cardType() === CardType.RED && !this.bluePlays)) {
-          this.changeActiveTeam();
+        newstate['clickedOnCurrentTurn'] += 1;
+        if (!(word.cardType() === CardType.BLUE && newstate['bluePlays']) &&
+            !(word.cardType() === CardType.RED && !newstate['bluePlays'])) {
+          this.changeActiveTeam(newstate);
         }
 
-        if (this.currentNumberHint > 0 && this.clickedOnCurrentTurn === this.currentNumberHint + 1) {
-          this.changeActiveTeam();
+        if (newstate['currentNumberHint'] > 0 && newstate['clickedOnCurrentTurn'] === newstate['currentNumberHint'] + 1) {
+          this.changeActiveTeam(newstate);
         }
-        this.dump(prev);
+        this.dump(this.getstate(), newstate);
       }
     }
 
     codemasterGivesClue(): void {
+      const newstate = this.getstate();
       const prev = this.getstate();
       prev['currentWordHint'] = '';
       prev['currentNumberHint'] = 0;
-      console.log(prev);
       // currentWordHint and currentNumberHint are updated directly in the form
-      this.codemasterHasToPlay = false;
-      this.gameHasStarted = true;
-      this.dump(prev);
+      newstate['codemasterHasToPlay'] = false;
+      newstate['gameHasStarted'] = true;
+      this.dump(prev, newstate);
     }
 
-    dump(prev) {
-      const obj = {
-         table: []
-      };
-      obj.table.push({'words': this.words,
-                      'bluePlays': this.bluePlays,
-                      'codemasterHasToPlay': this.codemasterHasToPlay,
-                      'currentWordHint': this.currentWordHint,
-                      'currentNumberHint': this.currentNumberHint,
-                      'clickedOnCurrentTurn': this.clickedOnCurrentTurn});
-
-      const json = this.getstate(); //JSON.stringify(obj);
-      this.http.post<any>('/codenamesserver/update', { lang: this.language , gameid : this.seed, prevstate : prev, state : json }).subscribe(data => {});
-      console.log(json);
+    dump(prev, newstate) {
+      this.http.post<any>('/codenamesserver/update', { lang: this.language , gameid : this.seed, prevstate : prev, state : newstate }).subscribe(data => {});
     }
 }
