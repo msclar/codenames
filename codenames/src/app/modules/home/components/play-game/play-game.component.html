@@ -18,14 +18,14 @@
             </form>
 
             <button class="d-flex justify-content-center mt-lg-4 btn btn-primary" *ngIf="!this.game.codemasterScreen"
-              [disabled]="this.game.codemasterHasToPlay" (click)="this.game.codemasterHasToPlay = true; this.game.changeActiveTeam();">
+              [disabled]="this.game.codemasterHasToPlay" (click)="this.game.endTurn();">
               End turn
             </button>
         </div>
 
         <div class="words">
             <div *ngFor="let word of this.game.words; trackBy: word?.word" class="word"
-                [class]="this.getClassFor(word)" (click)="this.game.update(word)">
+                [class]="this.getClassFor(word)" (click)="this.game.updateClickedClue(word)">
                 {{word.word}}
             </div>
         </div>
