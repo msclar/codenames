@@ -18,7 +18,7 @@
             </form>
 
             <button class="d-flex justify-content-center mt-lg-4 btn btn-primary" *ngIf="!this.game.codemasterScreen"
-              [disabled]="this.game.codemasterHasToPlay" (click)="this.game.codemasterHasToPlay = true; this.game.changeActiveTeam();">
+              [disabled]="this.game.codemasterHasToPlay" (click)="this.game.endTurn();">
               End turn
             </button>
         </div>

@@ -27,8 +27,17 @@ export class Game {
     }
 
     changeActiveTeam() {
+      this.codemasterHasToPlay = true;
       this.bluePlays = !this.bluePlays;
       this.clickedOnCurrentTurn = 0;
+      this.currentWordHint = '';
+      this.currentNumberHint = 0;
+    }
+
+    endTurn() {
+        const prev = this.getstate();
+        this.changeActiveTeam();
+        this.dump(prev);
     }
 
     updateFromState(obj) {
@@ -36,16 +45,19 @@ export class Game {
     
       this.bluePlays = obj['bluePlays'];
       this.codemasterHasToPlay = obj['codemasterHasToPlay'];
-      this.currentWordHint = obj['currentWordHint'];
-      this.currentNumberHint = obj['currentNumberHint'];
+      if (!this.codemasterHasToPlay) {
+          this.currentWordHint = obj['currentWordHint'];
+          this.currentNumberHint = obj['currentNumberHint'];
+      }
       this.clickedOnCurrentTurn = obj['clickedOnCurrentTurn'];
       this.gameHasStarted = obj['gameHasStarted']
 
-      const words = [];
+      //const words = [];
       for (let i = 0; i < obj['words'].length; i++) {
-        words.push(new Word(obj['words'][i]['word'], obj['words'][i]['type'], obj['words'][i]['selected']));
+        //words.push(new Word(obj['words'][i]['word'], obj['words'][i]['type'], obj['words'][i]['selected']));
+        this.words[i].selected = obj['words'][i]['selected'];
       }
-      this.words = words;
+      //this.words = words;
     }
 
     getstate() { // La mas o menos la inversa de updateFromState
@@ -56,7 +68,13 @@ export class Game {
         ret['currentNumberHint'] = this.currentNumberHint;
         ret['clickedOnCurrentTurn'] = this.clickedOnCurrentTurn;
         ret['gameHasStarted'] = this.gameHasStarted;
-        ret['words'] = this.words; // Supongo que no hace falta deep copy?
+        
+        const newWords = [];
+        for (let i = 0; i < this.words.length; i++) {
+            newWords.push(new Word(this.words[i]['word'], this.words[i]['type'], this.words[i]['selected']));
+        }
+        ret['words'] = newWords; // Supongo que no hace falta deep copy?
+        
         ret['initialstate'] = false;
         return ret;
     }
@@ -69,12 +87,10 @@ export class Game {
         this.clickedOnCurrentTurn += 1;
         if (!(word.cardType() === CardType.BLUE && this.bluePlays) &&
             !(word.cardType() === CardType.RED && !this.bluePlays)) {
-          this.codemasterHasToPlay = true;
           this.changeActiveTeam();
         }
 
         if (this.currentNumberHint > 0 && this.clickedOnCurrentTurn === this.currentNumberHint + 1) {
-          this.codemasterHasToPlay = true;
           this.changeActiveTeam();
         }
         this.dump(prev);
@@ -82,7 +98,10 @@ export class Game {
     }
 
     codemasterGivesClue(): void {
-      const prev = this.getstate()
+      const prev = this.getstate();
+      prev['currentWordHint'] = '';
+      prev['currentNumberHint'] = 0;
+      console.log(prev);
       // currentWordHint and currentNumberHint are updated directly in the form
       this.codemasterHasToPlay = false;
       this.gameHasStarted = true;
