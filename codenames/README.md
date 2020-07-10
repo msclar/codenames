@@ -1,6 +1,10 @@
 # Codenames
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.2.
+The frontend was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.2.
+
+The server was developed in bottle. Below you can find instructions to only load the frontend (TODO, add the server instructions!). 
+
+This code is designed to make the eyes of any competent full-stack developer burn.
 
 ## Development server
 
