@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from datetime import datetime
+import datetime
 
 from bottle import route, post, run, request
 from threading import RLock
@@ -43,7 +43,7 @@ dumpdir = "dump/"
 
 
 def valid(lang, gameid):
-    return lang in ["en", "es", "cn", "fr", "he", "it", "jp", "pt", "ru"] and re.match("[a-zA-Z0-9]+$", gameid)
+    return lang in ["en", "es", "cn", "fr", "he", "it", "jp", "pt", "ru"] and re.match("[a-zA-Z0-9-]+$", gameid)
 
 
 def writestate(lang, gameid, state):
