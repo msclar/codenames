@@ -43,12 +43,11 @@ dumpdir = "dump/"
 
 
 def valid(lang, gameid):
-    return lang in ["en", "es", "cn", "fr", "he", "it", "jp", "pt", "ru"] and re.match("[a-zA-z0-9]+$", gameid)
+    return lang in ["en", "es", "cn", "fr", "he", "it", "jp", "pt", "ru"] and re.match("[a-zA-Z0-9]+$", gameid)
 
 
 def writestate(lang, gameid, state):
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-    state['timestamp'] = timestamp
 
     # fallback si algun pillo toca el json
     moveId = state['moveId']
@@ -60,6 +59,7 @@ def writestate(lang, gameid, state):
     with mutex:
         with open(datadir + lang + "/" + gameid + ".json", "w") as f:
             json.dump(state, f)
+        state['timestamp'] = timestamp
         with open(dumpdir + lang + "/" + gameid + "-" + moveId + ".json", "w") as f:
             json.dump(state, f)
 
