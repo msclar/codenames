@@ -13,8 +13,8 @@ export class Word {
     ) {
     }
 
-    public click(isCodemasterScreen: boolean, codemasterHasToPlay: boolean): boolean {
-        if (!this.selected && !isCodemasterScreen && !codemasterHasToPlay) {
+    public click(isCodemasterScreen: boolean, codemasterHasToPlay: boolean, gameHasEnded: boolean): boolean {
+        if (!this.selected && !isCodemasterScreen && !codemasterHasToPlay && !gameHasEnded) {
           this.selected = !this.selected;
           return true;
         }

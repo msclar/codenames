@@ -35,7 +35,7 @@ const wordsForGameId = ['africa', 'agent', 'air', 'alien', 'alps', 'amazon', 'am
 export class StartGameComponent implements OnInit {
   public gameid;
   public language;
-
+  regex = RegExp( '^[a-zA-Z0-9-]+$');
 
   constructor(
     private gameStore: GamesStore,
@@ -48,6 +48,10 @@ export class StartGameComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  gameIdIsValid() {
+    return this.regex.test(this.gameid);
   }
 
   enter(): void {

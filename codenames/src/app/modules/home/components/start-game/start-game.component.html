@@ -17,9 +17,9 @@
             <div class="input-group">
                 <input [type]="'text'" autoFocus
                     class="form-control form-control-lg" name="gameid" ng-model="gameid" id="gameid" placeholder="Type in Game ID"
-                    [(ngModel)]="this.gameid" (change)="this.gameid = this.gameid" />
+                    [(ngModel)]="this.gameid"/>
                 <div class="input-group-append">
-                    <button type="submit" class="btn btn-success btn-lg" id="takerandomcheck" (click)="this.enter()">
+                    <button type="submit" class="btn btn-success btn-lg" id="takerandomcheck" [disabled]="!this.gameIdIsValid()" (click)="this.enter()">
                       Start or join game
                     </button>
                 </div>

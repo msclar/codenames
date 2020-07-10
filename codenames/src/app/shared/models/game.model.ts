@@ -1,5 +1,5 @@
 import {CardType, Word} from './word.model';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 
 
 export class Game {
@@ -15,6 +15,7 @@ export class Game {
     codemasterHasToPlay = true;
     codemasterScreen = false;
     gameHasStarted = false;
+    gameHasEnded = false;
     currentWordHint = '';
     currentNumberHint = '';
     clickedOnCurrentTurn = 0;
@@ -25,6 +26,20 @@ export class Game {
             this.updateFromState(data.state);
             setTimeout(() => {this.refresh(gameid, lang);}, 250);
         });
+    }
+
+    private found(words: Word[], type: CardType): number {
+      return words
+        .filter(w =>
+          w.type === type
+          && w.selected
+        ).length;
+    }
+
+    private total(words: Word[], type: CardType): number {
+      return words
+        .filter(w => w.type === type)
+        .length;
     }
 
     changeActiveTeam(newstate) {
@@ -53,6 +68,7 @@ export class Game {
       }
       this.clickedOnCurrentTurn = obj['clickedOnCurrentTurn'];
       this.gameHasStarted = obj['gameHasStarted'];
+      this.gameHasEnded = obj['gameHasEnded'];
       this.moveId = obj['moveId'];
 
       for (let i = 0; i < obj['words'].length; i++) {
@@ -68,6 +84,7 @@ export class Game {
         ret['currentNumberHint'] = this.currentNumberHint;
         ret['clickedOnCurrentTurn'] = this.clickedOnCurrentTurn;
         ret['gameHasStarted'] = this.gameHasStarted;
+        ret['gameHasEnded'] = this.gameHasEnded;
         ret['moveId'] = this.moveId;
 
         const newWords = [];
@@ -88,9 +105,15 @@ export class Game {
             break;
         }
       }
-      const clicked = word.click(this.codemasterScreen, this.codemasterHasToPlay);
+      const clicked = word.click(this.codemasterScreen, this.codemasterHasToPlay, this.gameHasEnded);
 
       if (clicked) {
+        if (word.cardType() === CardType.DEATH) {
+          newstate['gameHasEnded'] = true; // active player just lost
+          this.dump(this.getstate(), newstate);
+          return;
+        }
+
         newstate['clickedOnCurrentTurn'] += 1;
         const numberHint = parseInt(newstate['currentNumberHint'], 10);
         if (!(word.cardType() === CardType.BLUE && newstate['bluePlays']) &&
@@ -101,6 +124,12 @@ export class Game {
         } else {
           newstate['moveId'] += 1;
         }
+
+        if (this.found(newstate['words'], CardType.BLUE) === this.total(newstate['words'], CardType.BLUE) ||
+            this.found(newstate['words'], CardType.RED) === this.total(newstate['words'], CardType.RED)) {
+          newstate['gameHasEnded'] = true; // active player just won
+        }
+
         this.dump(this.getstate(), newstate);
       }
     }
@@ -118,6 +147,6 @@ export class Game {
     }
 
     dump(prev, newstate) {
-      this.http.post<any>('/codenamesserver/update', { lang: this.language , gameid : this.seed, prevstate : prev, state : newstate }).subscribe(data => {});
+      this.http.post<any>('/codenamesserver/update', { lang: this.language, gameid : this.seed, prevstate : prev, state : newstate }).subscribe(data => {});
     }
 }

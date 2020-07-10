@@ -62,4 +62,14 @@ export class GameScoreComponent implements OnInit, OnDestroy {
   get bluePlays(): boolean {
     return this.game.bluePlays;
   }
+
+  winner() {
+    if (this.blueFound === this.blueCount) {
+      return 'blue';
+    }
+    if (this.redFound === this.redCount) {
+      return 'red';
+    }
+    return this.bluePlays ? 'blue' : 'red';
+  }
 }

@@ -12,12 +12,13 @@
                            [(ngModel)]="this.game.currentNumberHint">
                 </div>
 
-                <button type="submit" class="btn btn-primary mb-2" [disabled]="!this.game.codemasterHasToPlay || !isParsedIntInRange(this.game.currentNumberHint)"
+                <button type="submit" class="btn btn-primary mb-2"
+                        [disabled]="!this.game.codemasterHasToPlay || !isParsedIntInRange(this.game.currentNumberHint) || this.game.gameHasEnded"
                         (click)="this.game.codemasterGivesClue(); wordClue.value = ''; numberClue.value = ''">Submit</button>
             </form>
 
             <button class="d-flex justify-content-center mt-lg-4 btn btn-primary" *ngIf="!this.game.codemasterScreen"
-              [disabled]="this.game.codemasterHasToPlay" (click)="this.game.endTurn();">
+              [disabled]="this.game.codemasterHasToPlay || this.game.gameHasEnded" (click)="this.game.endTurn();">
               End turn
             </button>
         </div>

@@ -2,14 +2,17 @@
     <div class="col-1">
         <img src="./assets/detective.png" width="75" height="75" alt="Detective codenames">
     </div>
-    <div class="col-7 text-center h4 align-text-bottom" ng-bind-html-unsafe="content"
-          *ngIf="this.game && this.game.gameHasStarted && !this.game.codemasterHasToPlay">
+    <div class="col-7 text-center h4 align-text-bottom"
+          *ngIf="this.game && this.game.gameHasStarted && !this.game.gameHasEnded && !this.game.codemasterHasToPlay">
       {{this.bluePlays ? 'blue' : 'red'}}'s spymaster gave clue <b>{{this.game.currentWordHint}} ({{this.game.currentNumberHint}} card(s)) </b> <br>
       {{this.bluePlays ? 'blue' : 'red'}} team has clicked {{this.game.clickedOnCurrentTurn}} card(s) this turn.
     </div>
-    <div class="col-6 text-center h4 align-text-bottom" ng-bind-html-unsafe="content"
-          *ngIf="!this.game || !this.game.gameHasStarted || this.game.codemasterHasToPlay">
+    <div class="col-7 text-center h4 align-text-bottom"
+          *ngIf="!this.game.gameHasEnded && (!this.game.gameHasStarted || this.game.codemasterHasToPlay)">
       {{this.bluePlays ? 'blue' : 'red'}}'s spymaster turn
+    </div>
+    <div class="col-7 text-center h4 align-text-bottom" *ngIf="this.game.gameHasEnded">
+      {{this.winner()}} wins
     </div>
     <div class="blue col-2 text-center" *ngIf="this.game">
         {{this.blueFound}} / {{this.blueCount}}
