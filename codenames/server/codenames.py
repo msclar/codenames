@@ -31,7 +31,7 @@ def codenamesUpdate():
             s = readstate(lang, gameid)
             if s != INITIAL and s != prevstate:
                 return {"error" : "prevstate is not up to date"}
-            writestate(lang, gameid, state)
+            writestate(lang, gameid, state, request.environ.get('HTTP_X_FORWARDED_FOR'))
         return {"success" : True}
     except ValueError:
         return {"error" : "Invalid json!"}
@@ -46,12 +46,12 @@ def valid(lang, gameid):
     return lang in ["en", "es", "cn", "fr", "he", "it", "jp", "pt", "ru"] and re.match("[a-zA-Z0-9-]+$", gameid)
 
 
-def writestate(lang, gameid, state):
+def writestate(lang, gameid, state, userip):
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
     # fallback si algun pillo toca el json
-    moveId = state['moveId']
-    if not re.match("[0-9]+$", gameid):
+    moveId = str(state['moveId'])
+    if not re.match("[0-9]+$", moveId):
       moveId = timestamp
 
     if not valid(lang, gameid):
@@ -60,6 +60,7 @@ def writestate(lang, gameid, state):
         with open(datadir + lang + "/" + gameid + ".json", "w") as f:
             json.dump(state, f)
         state['timestamp'] = timestamp
+        state['ip'] = userip
         with open(dumpdir + lang + "/" + gameid + "-" + moveId + ".json", "w") as f:
             json.dump(state, f)
 
