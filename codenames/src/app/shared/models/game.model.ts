@@ -18,6 +18,7 @@ export class Game {
     currentWordHint = '';
     currentNumberHint = 0;
     clickedOnCurrentTurn = 0;
+    moveId = 0;
 
     refresh(gameid, lang) {
         this.http.get<any>('/codenamesserver/get?lang=' + lang + "&gameid=" + gameid).subscribe(data => {
@@ -32,6 +33,7 @@ export class Game {
       newstate.clickedOnCurrentTurn = 0;
       newstate.currentWordHint = '';
       newstate.currentNumberHint = 0;
+      newstate.moveId += 1;
     }
 
     endTurn() {
@@ -42,7 +44,7 @@ export class Game {
 
     updateFromState(obj) {
       if (obj['initialstate']) { return; }
-    
+
       this.bluePlays = obj['bluePlays'];
       this.codemasterHasToPlay = obj['codemasterHasToPlay'];
       if (!this.codemasterHasToPlay) {
@@ -50,14 +52,12 @@ export class Game {
           this.currentNumberHint = obj['currentNumberHint'];
       }
       this.clickedOnCurrentTurn = obj['clickedOnCurrentTurn'];
-      this.gameHasStarted = obj['gameHasStarted']
+      this.gameHasStarted = obj['gameHasStarted'];
+      this.moveId = obj['moveId'];
 
-      //const words = [];
       for (let i = 0; i < obj['words'].length; i++) {
-        //words.push(new Word(obj['words'][i]['word'], obj['words'][i]['type'], obj['words'][i]['selected']));
         this.words[i].selected = obj['words'][i]['selected'];
       }
-      //this.words = words;
     }
 
     getstate() { // La mas o menos la inversa de updateFromState
@@ -68,13 +68,14 @@ export class Game {
         ret['currentNumberHint'] = this.currentNumberHint;
         ret['clickedOnCurrentTurn'] = this.clickedOnCurrentTurn;
         ret['gameHasStarted'] = this.gameHasStarted;
-        
+        ret['moveId'] = this.moveId;
+
         const newWords = [];
         for (let i = 0; i < this.words.length; i++) {
             newWords.push(new Word(this.words[i]['word'], this.words[i]['type'], this.words[i]['selected']));
         }
         ret['words'] = newWords; // Supongo que no hace falta deep copy?
-        
+
         ret['initialstate'] = false;
         return ret;
     }
@@ -94,10 +95,10 @@ export class Game {
         if (!(word.cardType() === CardType.BLUE && newstate['bluePlays']) &&
             !(word.cardType() === CardType.RED && !newstate['bluePlays'])) {
           this.changeActiveTeam(newstate);
-        }
-
-        if (newstate['currentNumberHint'] > 0 && newstate['clickedOnCurrentTurn'] === newstate['currentNumberHint'] + 1) {
+        } else if (newstate['currentNumberHint'] > 0 && newstate['clickedOnCurrentTurn'] === newstate['currentNumberHint'] + 1) {
           this.changeActiveTeam(newstate);
+        } else {
+          newstate['moveId'] += 1;
         }
         this.dump(this.getstate(), newstate);
       }
@@ -111,6 +112,7 @@ export class Game {
       // currentWordHint and currentNumberHint are updated directly in the form
       newstate['codemasterHasToPlay'] = false;
       newstate['gameHasStarted'] = true;
+      newstate['modeId'] += 1;
       this.dump(prev, newstate);
     }
 

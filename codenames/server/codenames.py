@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from datetime import datetime
 
 from bottle import route, post, run, request
 from threading import RLock
@@ -38,15 +39,28 @@ def codenamesUpdate():
         return {"error" : "missing parameters!"}
 
 datadir = "data/"
+dumpdir = "dump/"
+
 
 def valid(lang, gameid):
-    return lang in ["en", "es", "fr", "pt", "jp"] and re.match("[a-zA-z0-9]+$", gameid)
+    return lang in ["en", "es", "cn", "fr", "he", "it", "jp", "pt", "ru"] and re.match("[a-zA-z0-9]+$", gameid)
+
 
 def writestate(lang, gameid, state):
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+    state['timestamp'] = timestamp
+
+    # fallback si algun pillo toca el json
+    moveId = state['moveId']
+    if not re.match("[0-9]+$", gameid):
+      moveId = timestamp
+
     if not valid(lang, gameid):
         return INITIAL
     with mutex:
-        with open(datadir + lang + "/" + gameid, "w") as f:
+        with open(datadir + lang + "/" + gameid + ".json", "w") as f:
+            json.dump(state, f)
+        with open(dumpdir + lang + "/" + gameid + "-" + moveId + ".json", "w") as f:
             json.dump(state, f)
 
 
@@ -55,7 +69,7 @@ def readstate(lang, gameid):
         return INITIAL
     with mutex:
         try:
-            with open(datadir + lang + "/" + gameid, "r") as f:
+            with open(datadir + lang + "/" + gameid + ".json", "r") as f:
                 return json.load(f)
         except IOError:
             return INITIAL
@@ -75,6 +89,7 @@ def codenamesGet():
         #    return {"lang" : lang, "gameid" : gameid, "state" : state}
         #time.sleep(float(SLEEP_TIME) / 1000.0)
         #totalWait += SLEEP_TIME
-        
+
+
 if __name__ == "__main__":
     run(host="localhost", port=9999, server="paste")
