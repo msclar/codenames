@@ -69,4 +69,9 @@ export class PlayGameComponent implements OnInit, OnDestroy {
     const charCode = (event.which) ? event.which : event.keyCode;
     return !(charCode === 32);
   }
+
+  isParsedIntInRange(currentNumberHint: string) {
+    const number = parseInt(currentNumberHint, 10);
+    return number >= 0 && number <= 25;
+  }
 }

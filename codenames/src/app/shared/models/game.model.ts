@@ -16,7 +16,7 @@ export class Game {
     codemasterScreen = false;
     gameHasStarted = false;
     currentWordHint = '';
-    currentNumberHint = 0;
+    currentNumberHint = '';
     clickedOnCurrentTurn = 0;
     moveId = 0;
 

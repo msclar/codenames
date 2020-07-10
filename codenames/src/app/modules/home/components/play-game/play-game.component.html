@@ -10,10 +10,10 @@
                     <input type="text" class="form-control" #numberClue name="numberClue" placeholder="Number of words"
                            (keypress)="numberOnly($event)" autocomplete="off"
                            [(ngModel)]="this.game.currentNumberHint"
-                           (change)="this.game.currentNumberHint = 1 * this.game.currentNumberHint">
+                           (change)="this.game.currentNumberHint = this.game.currentNumberHint">
                 </div>
 
-                <button type="submit" class="btn btn-primary mb-2" [disabled]="!this.game.codemasterHasToPlay || this.game.currentNumberHint > 25 || this.game.currentNumberHint < 0"
+                <button type="submit" class="btn btn-primary mb-2" [disabled]="!this.game.codemasterHasToPlay || !isParsedIntInRange(this.game.currentNumberHint)"
                         (click)="this.game.codemasterGivesClue(); wordClue.value = ''; numberClue.value = ''">Submit</button>
             </form>
 
