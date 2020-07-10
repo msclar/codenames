@@ -16,7 +16,7 @@ export class Game {
     codemasterScreen = false;
     gameHasStarted = false;
     currentWordHint = '';
-    currentNumberHint = 0;
+    currentNumberHint = '';
     clickedOnCurrentTurn = 0;
 
     refresh(gameid, lang) {
@@ -42,7 +42,7 @@ export class Game {
 
     updateFromState(obj) {
       if (obj['initialstate']) { return; }
-    
+
       this.bluePlays = obj['bluePlays'];
       this.codemasterHasToPlay = obj['codemasterHasToPlay'];
       if (!this.codemasterHasToPlay) {
@@ -68,13 +68,13 @@ export class Game {
         ret['currentNumberHint'] = this.currentNumberHint;
         ret['clickedOnCurrentTurn'] = this.clickedOnCurrentTurn;
         ret['gameHasStarted'] = this.gameHasStarted;
-        
+
         const newWords = [];
         for (let i = 0; i < this.words.length; i++) {
             newWords.push(new Word(this.words[i]['word'], this.words[i]['type'], this.words[i]['selected']));
         }
         ret['words'] = newWords; // Supongo que no hace falta deep copy?
-        
+
         ret['initialstate'] = false;
         return ret;
     }
