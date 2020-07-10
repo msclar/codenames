@@ -92,10 +92,11 @@ export class Game {
 
       if (clicked) {
         newstate['clickedOnCurrentTurn'] += 1;
+        const numberHint = parseInt(newstate['currentNumberHint'], 10);
         if (!(word.cardType() === CardType.BLUE && newstate['bluePlays']) &&
-            !(word.cardType() === CardType.RED && !newstate['bluePlays'])) {
+          !(word.cardType() === CardType.RED && !newstate['bluePlays'])) {
           this.changeActiveTeam(newstate);
-        } else if (newstate['currentNumberHint'] > 0 && newstate['clickedOnCurrentTurn'] === newstate['currentNumberHint'] + 1) {
+        } else if (numberHint > 0 && newstate['clickedOnCurrentTurn'] === numberHint + 1) {
           this.changeActiveTeam(newstate);
         } else {
           newstate['moveId'] += 1;
