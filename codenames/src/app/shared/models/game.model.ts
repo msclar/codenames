@@ -112,7 +112,7 @@ export class Game {
       // currentWordHint and currentNumberHint are updated directly in the form
       newstate['codemasterHasToPlay'] = false;
       newstate['gameHasStarted'] = true;
-      newstate['modeId'] += 1;
+      newstate['moveId'] += 1;
       this.dump(prev, newstate);
     }
 
