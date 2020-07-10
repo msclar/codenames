@@ -70,6 +70,8 @@ export class GameScoreComponent implements OnInit, OnDestroy {
     if (this.redFound === this.redCount) {
       return 'red';
     }
+
+    // the active player touched the black card
     return this.bluePlays ? 'red' : 'blue';
   }
 }
