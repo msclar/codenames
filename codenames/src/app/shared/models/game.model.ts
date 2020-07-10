@@ -108,6 +108,7 @@ export class Game {
       const clicked = word.click(this.codemasterScreen, this.codemasterHasToPlay, this.gameHasEnded);
 
       if (clicked) {
+        newstate['clickedOnCurrentTurn'] += 1;
         if (word.cardType() === CardType.DEATH) {
           newstate['moveId'] += 1;
           newstate['gameHasEnded'] = true; // active player just lost
@@ -115,7 +116,12 @@ export class Game {
           return;
         }
 
-        newstate['clickedOnCurrentTurn'] += 1;
+        if (this.found(newstate['words'], CardType.BLUE) === this.total(newstate['words'], CardType.BLUE) ||
+            this.found(newstate['words'], CardType.RED) === this.total(newstate['words'], CardType.RED)) {
+          newstate['moveId'] += 1;
+          newstate['gameHasEnded'] = true; // active player just won
+        }
+
         const numberHint = parseInt(newstate['currentNumberHint'], 10);
         if (!(word.cardType() === CardType.BLUE && newstate['bluePlays']) &&
           !(word.cardType() === CardType.RED && !newstate['bluePlays'])) {
@@ -124,12 +130,6 @@ export class Game {
           this.changeActiveTeam(newstate);
         } else {
           newstate['moveId'] += 1;
-        }
-
-        if (this.found(newstate['words'], CardType.BLUE) === this.total(newstate['words'], CardType.BLUE) ||
-            this.found(newstate['words'], CardType.RED) === this.total(newstate['words'], CardType.RED)) {
-          newstate['moveId'] += 1;
-          newstate['gameHasEnded'] = true; // active player just won
         }
 
         this.dump(this.getstate(), newstate);
