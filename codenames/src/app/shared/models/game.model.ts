@@ -108,7 +108,7 @@ export class Game {
       const newstate = this.getstate();
       const prev = this.getstate();
       prev['currentWordHint'] = '';
-      prev['currentNumberHint'] = 0;
+      prev['currentNumberHint'] = '';
       // currentWordHint and currentNumberHint are updated directly in the form
       newstate['codemasterHasToPlay'] = false;
       newstate['gameHasStarted'] = true;
