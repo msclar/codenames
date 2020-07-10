@@ -32,7 +32,7 @@ export class Game {
       newstate.bluePlays = !newstate.bluePlays;
       newstate.clickedOnCurrentTurn = 0;
       newstate.currentWordHint = '';
-      newstate.currentNumberHint = 0;
+      newstate.currentNumberHint = '';
       newstate.moveId += 1;
     }
 
