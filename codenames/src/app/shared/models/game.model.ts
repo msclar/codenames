@@ -109,6 +109,7 @@ export class Game {
 
       if (clicked) {
         if (word.cardType() === CardType.DEATH) {
+          newstate['moveId'] += 1;
           newstate['gameHasEnded'] = true; // active player just lost
           this.dump(this.getstate(), newstate);
           return;
@@ -127,6 +128,7 @@ export class Game {
 
         if (this.found(newstate['words'], CardType.BLUE) === this.total(newstate['words'], CardType.BLUE) ||
             this.found(newstate['words'], CardType.RED) === this.total(newstate['words'], CardType.RED)) {
+          newstate['moveId'] += 1;
           newstate['gameHasEnded'] = true; // active player just won
         }
 
